@@ -1,0 +1,35 @@
+#!/bin/bash
+rm -f /tmp/giannis
+rm -f /tmp/glafkos
+rm -f /tmp/spyros
+rm -f stdout/*
+mkfifo /tmp/giannis
+mkfifo /tmp/glafkos
+mkfifo /tmp/spyros
+sh server.sh &
+echo 'server is open!'
+sleep 1
+sh giannis.sh &
+echo 'giannis is open!'
+sh glafkos.sh &
+echo 'glafkos is open!'
+sh spyros.sh &
+echo 'spyros is open!'
+echo 'please wait!'
+sleep 6
+echo 'they will start talking'
+bash write_pipe giannis hello
+bash write_pipe giannis my_name_is_giannis
+echo 'giannis talked'
+bash write_pipe glafkos hello
+bash write_pipe glafkos my_name_is_glafkos
+echo 'glafkos talked'
+bash write_pipe spyros  hello
+bash write_pipe spyros  my_name_is_spyros
+echo 'spyros talked'
+sleep 3
+pkill -2 server
+rm -f /tmp/giannis
+rm -f /tmp/glafkos
+rm -f /tmp/spyros
+echo 'end of demo! check stdout/ directory'
